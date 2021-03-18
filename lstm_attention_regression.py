@@ -36,7 +36,7 @@ warnings.filterwarnings("ignore")
 # dim_feature = 100
 
 # number of labels
-NL = 2
+# NL = 3
 
 class Initial_Dataset(Dataset):
     """docstring for ."""
@@ -321,29 +321,18 @@ class DL_Model():
         #     print(f'error.pk not exist!')
         #     quit()
 
-    def predict(self, pred_x):
-        # # import pdb; pdb.set_trace()
-        # self.pred_x = self.scaler_x.transform([pred_x[:3000]])
-        # self.tensor_pred_x = torch.tensor(self.pred_x,dtype=torch.float32,device=self.device)
-        # # import pdb; pdb.set_trace()
-        # self.train_y_pred = self.scaler_y.inverse_transform(self.ae_Net(self.tensor_pred_x[:,np.newaxis,:]).cpu().detach().numpy())
-        # # import pdb; pdb.set_trace()
-        # # print(self.train_y_pred)
-        # # import pdb; pdb.set_trace()
-        # return self.train_y_pred[0]
-
-
+    # dim_feature=100 means we need to reshape eg 1000 to 10x100, but if the input can’t divided by 100 we just take the part up to n times 100.
+    def predict(self, pred_x, dim_feature=100):
         self.pred_x = self.scaler_x.transform([pred_x]) #self.scaler_x.transform([pred_x[:3000]])
-        self.pred_x = self.pred_x[:, :(self.window_len // 100) * 100].reshape(len(self.pred_x),-1,100)
+        self.pred_x = self.pred_x[:, :(self.window_len // dim_feature) * dim_feature].reshape(len(self.pred_x),-1,dim_feature)
 
         self.tensor_pred_x = torch.tensor(self.pred_x,dtype=torch.float32,device=self.device)
-        # self.train_y_pred = self.scaler_y.inverse_transform(self.ae_Net(self.tensor_pred_x[:,np.newaxis,:]).cpu().detach().numpy())
-        # import pdb; pdb.set_trace()
-        self.train_y_pred = torch.argmax(self.lstmAtt_Net(self.tensor_pred_x),1).cpu().detach().numpy()
 
-        # import pdb; pdb.set_trace()
+        self.train_y_pred = self.scaler_y.inverse_transform(self.lstmAtt_Net(self.tensor_pred_x.float()).cpu().detach().numpy())[0]
 
-        return np.round(self.train_y_pred)[0]
+        # print(self.train_y_pred)
+
+        return self.train_y_pred
 
 
     def evaluate(self, data, devide_factor=0.8, VERBOSE=False, INFLUX=False):
@@ -386,11 +375,12 @@ class DL_Model():
             # plt.plot(y_pred,'r')
             # plt.show()
 
+            # print(y_pred)
 
             pred_.append(y_pred)
             gt_.append(y_gt)
 
-        plt.figure()
+        plt.figure(figsize=(20,6))
         plt.plot(pred_,'b')
         plt.plot(gt_,'r')
         plt.show()
@@ -407,6 +397,7 @@ class DL_Model():
 def main():
     list_x = []
     list_y = []
+    global NL
 
     ####### modify mapping relation here
 
@@ -421,14 +412,14 @@ def main():
     #     list_x.append(data)
     #     label =  [systolic, diastolic] #, heart_rate]
     #     list_y.append(label)
-    # data = np.load("./data/training_set.npy")
+    data = np.load("./data/training_set.npy")
     # data = np.load("./data/good_set.npy")
     # data = np.load("./data/bad_set.npy")
-    data = np.load("./data/mixed_set.npy")
+    # data = np.load("./data/mixed_set.npy")
 
-
-    list_x = data[:,:-3] # 10 second 100Hz SCG data
-    list_y = data[:, -3:]
+    NL = 3
+    list_x = data[:,:-NL] # 10 second 100Hz SCG data
+    list_y = data[:, -NL:] # NL = 3 labels
     # print(list_y)
     # print(list_x, list_y)
     list_x = np.asarray(list_x)
@@ -436,19 +427,25 @@ def main():
     dataset = np.concatenate((list_x, list_y),1)
 
 
-    # dataset = np.load('/Users/mingsong/Documents/PhD_stuff/Ecuador_work/VitalSigns/data/csv_25846_classification.npy')
-    # dataset = np.load('../../filtered_csv_91406.npy')
-    # dataset = np.load('../../csv_56413_classification.npy')
-
     auto_encoder = DL_Model()
-    # auto_encoder.fit(all_data=dataset, window_len=duration*fs, devide_factor=0.8,learning_rate=0.0008, batch_size=64, dim_feature=100)
-    auto_encoder.load_model('./model/LSTM_regression_models')
+    auto_encoder.fit(all_data=dataset, window_len=duration*fs, devide_factor=0.8,learning_rate=0.0008, batch_size=64, dim_feature=100)
+    # auto_encoder.load_model('./model/LSTM_regression_models')
     # auto_encoder.evaluate(dataset, devide_factor=0.8)
-    auto_encoder.evaluate(dataset, devide_factor=0.0)
+    # auto_encoder.evaluate(dataset, devide_factor=0.0)
 
-    # print(list_x[0,:])
-    # print(auto_encoder.predict(list_x[0,:]))
+    # # print(list_x[0,:])
+    # pred_y = [0]*list_x.shape[0]
+    # # print(list_x.shape[0])
+    # for i in range(list_x.shape[0]):
+    #     # pred_y = auto_encoder.predict(list_x[0,:])
+    #     pred_y[i] = auto_encoder.predict(list_x[i,:])
+    #     # print(pred_y, list_y[0,:])
+    #     # print(pred_y[i], list_y[i,:])
 
+    # pred_ = np.asarray(pred_y)
+    # gt_ = np.asarray(list_y)
+    # MAE = np.mean(abs(pred_-gt_),axis=0)
+    # print(f' The MAE is {MAE}')
 
 if __name__ == '__main__':
     main()
