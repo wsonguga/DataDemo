@@ -3,8 +3,6 @@
 author: ming
 ming.song.cn@outlook.com
 copyright@2020
-[TODO] model save as one file, remember to add window_len to model file
-        warm start method
 '''
 
 
@@ -429,6 +427,10 @@ def main():
 
     auto_encoder = DL_Model()
     auto_encoder.fit(all_data=dataset, window_len=duration*fs, devide_factor=0.8,learning_rate=0.0008, batch_size=64, dim_feature=100)
+    auto_encoder.load_model('./model/LSTM_regression_models')
+
+
+
     # auto_encoder.load_model('./model/LSTM_regression_models')
     # auto_encoder.evaluate(dataset, devide_factor=0.8)
     # auto_encoder.evaluate(dataset, devide_factor=0.0)
