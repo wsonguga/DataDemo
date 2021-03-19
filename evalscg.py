@@ -20,11 +20,11 @@ from tslearn.preprocessing import TimeSeriesScalerMeanVariance
 
 plt.rcParams['figure.figsize'] = [20, 8]  # Bigger images
 
-# good_data = np.load("./data/scg/good_data.npy")
-# bad_data = np.load("./data/scg/bad_data.npy")
+good_data = np.load("./data/scg/good_data.npy")
+bad_data = np.load("./data/scg/bad_data.npy")
 
-good_data = np.load("./data/good_set.npy")
-bad_data = np.load("./data/bad_set.npy")
+# good_data = np.load("./data/good_set.npy")
+# bad_data = np.load("./data/bad_set.npy")
 
 good_data = good_data[:,:1000]
 bad_data = bad_data[:,:1000]
