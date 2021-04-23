@@ -7,17 +7,17 @@ warnings.filterwarnings('ignore')
 import sys
 import time
 sys.path.insert(1, './')
-import datasim as nk
+# import datasim as nk
 import numpy as np
-import pandas as pd
-import seaborn as sns
+# import pandas as pd
+# import seaborn as sns
 import matplotlib.pyplot as plt
 import random
-from scipy import signal
-#%matplotlib inline
-from tslearn.clustering import KShape
-from tslearn.datasets import CachedDatasets
-from tslearn.preprocessing import TimeSeriesScalerMeanVariance
+# from scipy import signal
+# #%matplotlib inline
+# from tslearn.clustering import KShape
+# from tslearn.datasets import CachedDatasets
+# from tslearn.preprocessing import TimeSeriesScalerMeanVariance
 
 plt.rcParams['figure.figsize'] = [20, 7]  # Bigger images
 
@@ -59,7 +59,7 @@ for file in file_list:
     for k in range(int(N/(2*M))): 
         cid = fig.canvas.mpl_connect('button_press_event', onclick)
             # plt.text(0, 0, "Single click to pause/unpause, double click to quit")
-        fig.text(0.3, 0.95, "Single click to pause/unpause, double click to quit", size=10, rotation=0,
+        fig.text(0.3, 0.95, "Single click to pause/unpause, double click to quit. Do not click on window close icon", size=10, rotation=0,
             ha="center", va="center",
             bbox=dict(boxstyle="round",
                     ec=(1., 0.5, 0.5),
