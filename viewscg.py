@@ -76,17 +76,27 @@ for file in file_list:
             # ax.xlabel('Number of Samples')
             # cid = fig.canvas.mpl_connect('button_press_event', onclick)
 
+            index = k*2*M + 2*ind
+            if labels[index][-1] == 1:
+                color = 'k-' # bad data
+            else:
+                color = 'g-' # good data
             plt.subplot(M,2,2*ind+1)
             plt.cla()   # clear previous plot
-            plt.plot(data[k*2*M + 2*ind])
-            plt.title(f'index: [{k*2*M + 2*ind}] labels: {labels[k*2*M + 2*ind]}')
+            plt.plot(data[index], color)
+            plt.title(f'index: [{index}] labels: {labels[index].astype(int)}')
             plt.ylabel('Amplitude')
             plt.xlabel('Number of Samples')
 
+            index = k*2*M + 2*ind + 1
+            if labels[index][-1] == 1: 
+                color = 'k-' # bad data
+            else:
+                color = 'g-' # good data            
             plt.subplot(M,2,2*ind+2)
             plt.cla()   # clear previous plot
-            plt.plot(data[k*2*M + 2*ind+1])
-            plt.title(f'index: [{k*2*M + 2*ind + 1}] labels: {labels[k*2*M + 2*ind +1]}')
+            plt.plot(data[index], color)
+            plt.title(f'index: [{index}] labels: {labels[index].astype(int)}')
             plt.ylabel('Amplitude')
             plt.xlabel('Number of Samples')
         plt.pause(0.05)
