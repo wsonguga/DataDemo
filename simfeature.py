@@ -5,7 +5,7 @@ import random, os, sys
 def str2bool(v):
   return v.lower() in ("true", "1", "linear")
 
-q = 2 # numebr of rows
+q = 200 # numebr of rows
 n = 20 # number of columns (e.g., features)
 m = 5 # number of needed columns (e.g., features). m may be unknown and need to be optimized as part of the search
 
