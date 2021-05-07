@@ -56,7 +56,7 @@ for file in file_list:
     fig, ax = plt.subplots()
     # ax.plot(np.random.rand(10))
 
-    index_col = []
+    # index_col = []
     for k in range(int(N/(2*M))): 
         cid = fig.canvas.mpl_connect('button_press_event', onclick)
             # plt.text(0, 0, "Single click to pause/unpause, double click to quit")
@@ -77,7 +77,7 @@ for file in file_list:
                 plt.subplot(M,2,2*ind+col)
                 plt.cla()   # clear previous plot
                 plt.plot(data[index_row], color)
-                plt.title(f'index: [{index_row}] labels: {labels[index_row, index_col].astype(int)}')
+                plt.title(f'index: [{index_row}] labels: {labels[index_row].astype(int)}')
                 plt.ylabel('Amplitude')
                 plt.xlabel('Number of Samples')
         plt.pause(0.05)
