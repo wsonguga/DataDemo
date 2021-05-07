@@ -56,6 +56,7 @@ for file in file_list:
     fig, ax = plt.subplots()
     # ax.plot(np.random.rand(10))
 
+    index_col = []
     for k in range(int(N/(2*M))): 
         cid = fig.canvas.mpl_connect('button_press_event', onclick)
             # plt.text(0, 0, "Single click to pause/unpause, double click to quit")
@@ -66,39 +67,19 @@ for file in file_list:
                     fc=(1., 0.8, 0.8),
                     )
             )
-        for ind in range(M):
-            # plt.figure(figsize=(20, 4))
-            # fig, ax = plt.subplot(M,2,2*ind+1)
-            # ax.cla()   # clear previous plot
-            # ax.plot(data[k*2*M + 2*ind])
-            # ax.title(f'index: [{k*2*M + 2*ind}] Parameters: {parameters[k*2*M + 2*ind]}')
-            # ax.ylabel('Amplitude')
-            # ax.xlabel('Number of Samples')
-            # cid = fig.canvas.mpl_connect('button_press_event', onclick)
-
-            index = k*2*M + 2*ind
-            if labels[index][-1] == 1:
-                color = 'k-' # bad data
-            else:
-                color = 'g-' # good data
-            plt.subplot(M,2,2*ind+1)
-            plt.cla()   # clear previous plot
-            plt.plot(data[index], color)
-            plt.title(f'index: [{index}] labels: {labels[index].astype(int)}')
-            plt.ylabel('Amplitude')
-            plt.xlabel('Number of Samples')
-
-            index = k*2*M + 2*ind + 1
-            if labels[index][-1] == 1: 
-                color = 'k-' # bad data
-            else:
-                color = 'g-' # good data            
-            plt.subplot(M,2,2*ind+2)
-            plt.cla()   # clear previous plot
-            plt.plot(data[index], color)
-            plt.title(f'index: [{index}] labels: {labels[index].astype(int)}')
-            plt.ylabel('Amplitude')
-            plt.xlabel('Number of Samples')
+        for col in [1, 2]:
+            for ind in range(M):
+                index_row = k*2*M + (col-1)*M+ ind
+                if labels[index_row][-1] == 1:
+                    color = 'k-' # bad data
+                else:
+                    color = 'g-' # good data
+                plt.subplot(M,2,2*ind+col)
+                plt.cla()   # clear previous plot
+                plt.plot(data[index_row], color)
+                plt.title(f'index: [{index_row}] labels: {labels[index_row, index_col].astype(int)}')
+                plt.ylabel('Amplitude')
+                plt.xlabel('Number of Samples')
         plt.pause(0.05)
         while(pause):
             plt.pause(0.05)
