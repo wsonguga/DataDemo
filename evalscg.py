@@ -29,6 +29,7 @@ print(bad_data.shape)
 
 from scipy import spatial
 from sklearn.metrics.pairwise import pairwise_distances
+from data_quality_classifier import DATA_QUALITY_Model
 
 # anchor = good_data[0]
 
@@ -47,22 +48,27 @@ from sklearn.metrics.pairwise import pairwise_distances
 
 all_data = arr = np.concatenate((good_data, bad_data), axis=0)
 
-N = 20
-for ind in range(N):
-    # plt.figure(figsize=(20, 4))
-    plt.subplot(N,2,2*ind+1)
-    plt.plot(good_data[ind])
-    plt.title('Good')
-    plt.ylabel('Amplitude')
-    plt.xlabel('Number of Samples')
-
-    plt.subplot(N,2,2*ind+2)
-    plt.plot(bad_data[ind])
-    plt.title('Bad')
-    plt.ylabel('Amplitude')
-    plt.xlabel('Number of Samples')
-
-plt.show()
+all_data = arr = np.load('./data/scg/F1_0204_all_data.npy')
+np.random.shuffle(all_data)
+all_data = arr = all_data[:60,:1000]
+# import pdb; pdb.set_trace()
+#
+# N = 20
+# for ind in range(N):
+#     # plt.figure(figsize=(20, 4))
+#     plt.subplot(N,2,2*ind+1)
+#     plt.plot(good_data[ind])
+#     plt.title('Good')
+#     plt.ylabel('Amplitude')
+#     plt.xlabel('Number of Samples')
+#
+#     plt.subplot(N,2,2*ind+2)
+#     plt.plot(bad_data[ind])
+#     plt.title('Bad')
+#     plt.ylabel('Amplitude')
+#     plt.xlabel('Number of Samples')
+#
+# plt.show()
 
 distance = np.corrcoef(all_data)
 plt.imshow(distance)
@@ -110,9 +116,47 @@ for yi in range(2):
     # plt.ylim(-4, 4)
     plt.title("Cluster %d, N %d" % (yi + 1, N))
     plt.tight_layout()
+
+
+
+#### classifier
+data_quality_model = DATA_QUALITY_Model()
+# data_quality_model.fit(all_data=dataset, window_len=1000, devide_factor=0.8,learning_rate=0.0005, batch_size=64, dim_feature=500)
+data_quality_model.load_model('./Data_Quality_Classifier_models')
+
+good_data = []
+bad_data = []
+for jnd, each_vali in enumerate(all_data):
+    cur_pred = data_quality_model.predict(each_vali)
+    # if (len(good_data) >= 40) and  (len(bad_data) >= 40):
+    #     break
+    if cur_pred == 0:
+        good_data.append(each_vali[:1000])
+        # plt.plot(each_vali[:1000])
+        # plt.show()
+        # pdf_good.savefig()
+        # plt.cla()
+    else:
+        bad_data.append(each_vali[:1000])
+        # plt.plot(each_vali[:1000])
+        # plt.show()
+        # pass
+        # pdf_bad.savefig()
+        # plt.cla()
+good_data = np.asarray(good_data)
+bad_data = np.asarray(bad_data)
+# import pdb; pdb.set_trace()
+
+plt.figure()
+for gnd, each_good in enumerate(good_data):
+    plt.subplot(len(good_data),1,gnd+1)
+    plt.plot(each_good)
+    # plt.
+plt.figure()
+for bnd, each_bad in enumerate(bad_data):
+    plt.subplot(len(bad_data),1,bnd+1)
+    plt.plot(each_bad)
+
+
 plt.show()
-
-
-
-
 # %%

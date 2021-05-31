@@ -22,10 +22,11 @@ duration = 10
 
 for ind in range(N):
     heart_rate = random.randint(60, 90)
+    # respiration_rate = random.randint(10, 20)
     systolic = random.randint(90,150)
     diastolic = random.randint(70,100)
     fs = 100
-    
+
     data = nk.scg_simulate(duration=duration, sampling_rate=fs, noise=0.15, heart_rate=heart_rate, systolic=systolic, diastolic=diastolic)
     x = data #/np.linalg.norm(data)
 
@@ -47,7 +48,7 @@ for ind in range(N):
 
     # f, t, Zxx = signal.stft(x, fs, nperseg=npseg, noverlap = npseg-slidingstep)
     # f, t, Zxx = signal.spectrogram(x, fs)
-    
+
     # plt.subplot(N,2,2*ind+2)
     # plt.pcolormesh(t, f[int(fmin*npseg/fs):int(fmax*npseg/fs)+1], np.abs(Zxx[int(fmin*npseg/fs):int(fmax*npseg/fs)+1,:]), shading='gouraud')
     # #plt.pcolormesh(t, f, np.abs(Zxx), shading='gouraud')
@@ -55,7 +56,7 @@ for ind in range(N):
     # plt.ylabel('Frequency [Hz]')
     # plt.xlabel('Time [sec]')
     ind +=1
-    
+
 plt.show()
 
 # # Alternate heart rate and noise levels
