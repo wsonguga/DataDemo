@@ -22,7 +22,7 @@ duration = 10
 
 for ind in range(N):
     heart_rate = random.randint(60, 90)
-    # respiration_rate = random.randint(10, 20)
+    respiration_rate = random.randint(10, 20)
     systolic = random.randint(90,150)
     diastolic = random.randint(70,100)
     fs = 100

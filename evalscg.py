@@ -23,6 +23,13 @@ plt.rcParams['figure.figsize'] = [20, 8]  # Bigger images
 good_data = np.load("./data/scg/good_data.npy")
 bad_data = np.load("./data/scg/bad_data.npy")
 
+# good_data = np.load("./data/good_set.npy")
+# bad_data = np.load("./data/bad_set.npy")
+
+good_data = good_data[:,:1000]
+bad_data = bad_data[:,:1000]
+
+
 print(good_data.shape)
 
 print(bad_data.shape)
@@ -48,6 +55,7 @@ from data_quality_classifier import DATA_QUALITY_Model
 
 all_data = arr = np.concatenate((good_data, bad_data), axis=0)
 
+<<<<<<< HEAD
 all_data = arr = np.load('./data/scg/F1_0204_all_data.npy')
 np.random.shuffle(all_data)
 all_data = arr = all_data[:60,:1000]
@@ -69,6 +77,26 @@ all_data = arr = all_data[:60,:1000]
 #     plt.xlabel('Number of Samples')
 #
 # plt.show()
+=======
+N = good_data.shape[0]
+#N = 20
+
+for ind in range(N):
+    # plt.figure(figsize=(20, 4))
+    plt.subplot(N,2,2*ind+1)
+    plt.plot(good_data[ind])
+    plt.title('Good')
+    plt.ylabel('Amplitude')
+    plt.xlabel('Number of Samples')
+
+    plt.subplot(N,2,2*ind+2)
+    plt.plot(bad_data[ind])
+    plt.title('Bad')
+    plt.ylabel('Amplitude')
+    plt.xlabel('Number of Samples')
+
+plt.show()
+>>>>>>> 86ccd67f95174229d5c13cd4559bd7b9ce8cb669
 
 distance = np.corrcoef(all_data)
 plt.imshow(distance)
