@@ -13,6 +13,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import random
 from scipy import signal
+from tqdm import tqdm
 #%matplotlib inline
 
 plt.rcParams['figure.figsize'] = [20, 10]  # Bigger images
@@ -25,7 +26,7 @@ plt.rcParams['figure.figsize'] = [20, 10]  # Bigger images
 #             ]
 
 gen_list = [
-            ['training_set',5000, 0], #5000
+            ['training_set',10000, 0], #5000
             ]
 
 for gen_info in gen_list:
@@ -38,7 +39,7 @@ for gen_info in gen_list:
 
     # plt.figure(figsize=(20, 4))
 
-    for ind in range(N):
+    for ind in tqdm(range(N)):
         heart_rate = random.randint(60, 90)
         respiratory_rate = random.randint(10, 25)
         systolic = random.randint(90,150)
@@ -51,7 +52,8 @@ for gen_info in gen_list:
             # print (noise)
 
         data = nk.scg_simulate(duration=duration, sampling_rate=fs, noise=noise, heart_rate=heart_rate, respiratory_rate=respiratory_rate, systolic=systolic, diastolic=diastolic)
-        simulated_data.append(list(data)+[heart_rate]+[systolic]+[diastolic])
+        ## N + 6 size. 6 are [mat_int(here 0 for synthetic data), time_stamp, hr, rr, sbp, dbp]
+        simulated_data.append(list(data)+[0]+[ind]+[heart_rate]+[respiratory_rate]+[systolic]+[diastolic])
 
         # plot the signals and spectrogram
         x = data #/np.linalg.norm(data)
