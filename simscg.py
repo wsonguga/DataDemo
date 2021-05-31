@@ -17,11 +17,15 @@ from scipy import signal
 
 plt.rcParams['figure.figsize'] = [20, 10]  # Bigger images
 
+# gen_list = [
+#             ['training_set',5000, 0.15], #5000
+#             ['good_set',500, 0.15], #1500
+#             ['bad_set',500, 0.75], #1500
+#             ['mixed_set',500, -1],
+#             ]
+
 gen_list = [
-            ['training_set',5000, 0.15], #5000
-            ['good_set',500, 0.15], #1500
-            ['bad_set',500, 0.75], #1500
-            ['mixed_set',500, -1],
+            ['training_set',5000, 0], #5000
             ]
 
 for gen_info in gen_list:
@@ -36,6 +40,7 @@ for gen_info in gen_list:
 
     for ind in range(N):
         heart_rate = random.randint(60, 90)
+        respiratory_rate = random.randint(10, 25)
         systolic = random.randint(90,150)
         diastolic = random.randint(70,100)
         fs = 100
@@ -43,9 +48,9 @@ for gen_info in gen_list:
         noise = float(gen_info[2])
         if noise == -1:
             noise = random.choice([0.15, 0.5, 0.75])
-            # print (noise) 
+            # print (noise)
 
-        data = nk.scg_simulate(duration=duration, sampling_rate=fs, noise=noise, heart_rate=heart_rate, systolic=systolic, diastolic=diastolic)
+        data = nk.scg_simulate(duration=duration, sampling_rate=fs, noise=noise, heart_rate=heart_rate, respiratory_rate=respiratory_rate, systolic=systolic, diastolic=diastolic)
         simulated_data.append(list(data)+[heart_rate]+[systolic]+[diastolic])
 
         # plot the signals and spectrogram
@@ -61,7 +66,7 @@ for gen_info in gen_list:
         # plt.subplot(N,2,2*ind+1)
 
         # plt.subplot(N,1,ind+1)
-        
+
         # plt.plot(x)
         # plt.title(f'Raw, HR {heart_rate} SBP {systolic} DBP {diastolic} Noise {noise}')
         # plt.ylabel('Amplitude')

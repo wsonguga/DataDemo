@@ -8,7 +8,7 @@ from ..signal import signal_distort, signal_resample
 
 
 def scg_simulate(
-    duration=10, length=None, sampling_rate=100, noise=0.01, heart_rate=60, heart_rate_std=1, systolic=120, diastolic=80, method="simple", random_state=None
+    duration=10, length=None, sampling_rate=100, noise=0.01, heart_rate=60, heart_rate_std=1, respiratory_rate=15, systolic=120, diastolic=80, method="simple", random_state=None
 ):
     """Simulate an scg/EKG signal.
 
@@ -78,11 +78,11 @@ def scg_simulate(
         duration = length / sampling_rate
 
     # Run appropriate method
-    
+
     if method.lower() in ["simple", "daubechies"]:
         # print("method is:", method)
         scg = _scg_simulate_daubechies(
-            duration=duration, length=length, sampling_rate=sampling_rate, heart_rate=heart_rate, systolic=systolic, diastolic=diastolic
+            duration=duration, length=length, sampling_rate=sampling_rate, heart_rate=heart_rate, respiratory_rate=respiratory_rate,  systolic=systolic, diastolic=diastolic
         )
     # else:
     #     # print("method is:", method)
@@ -122,7 +122,7 @@ def scg_simulate(
 # =============================================================================
 # Daubechies
 # =============================================================================
-def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_rate=70, systolic=120, diastolic=80):
+def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_rate=70, respiratory_rate=15, systolic=120, diastolic=80):
     """Generate an artificial (synthetic) scg signal of a given duration and sampling rate.
 
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
@@ -133,7 +133,7 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
     # cardiac = scipy.signal.wavelets.daub(10)
     cardiac_s = scipy.signal.wavelets.daub(int(systolic/10)) * int(math.sqrt(pow(systolic,2)+pow(heart_rate,2)))
     # print("cardiac_s:", len(cardiac_s))
-    
+
     cardiac_d = scipy.signal.wavelets.daub(int(diastolic/10)) * int(math.sqrt(pow(diastolic,2)+pow(heart_rate,2))*0.3)
     # print("cardiac_d:", len(cardiac_d))
 
@@ -157,6 +157,21 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
         scg, sampling_rate=int(len(scg) / 10), desired_length=length, desired_sampling_rate=sampling_rate
     )
 
+
+    ### add rr
+    num_points = duration * sampling_rate
+    x_space = np.linspace(0,1,num_points)
+    seg_fre = respiratory_rate / (60/duration)
+    seg_amp = max(scg)*0.10
+    rr_component = seg_amp*np.sin(2*np.pi * seg_fre * x_space)
+    scg += rr_component
+
+    # import matplotlib.pyplot as plt
+    # plt.plot(rr_component,'r')
+    # plt.plot(scg)
+    # plt.show()
+
+    # import pdb; pdb.set_trace()
     return scg
 
 
