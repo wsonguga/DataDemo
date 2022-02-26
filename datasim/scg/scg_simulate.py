@@ -5,7 +5,7 @@ import numpy as np
 import scipy
 
 from ..signal import signal_distort, signal_resample
-
+import matplotlib.pyplot as plt
 
 def scg_simulate(
     duration=10, length=None, sampling_rate=100, noise=0.01, heart_rate=60, heart_rate_std=1, respiratory_rate=15, systolic=120, diastolic=80, method="simple", random_state=None
@@ -130,18 +130,24 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
 
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
-    # cardiac = scipy.signal.wavelets.daub(10)
-    cardiac_s = scipy.signal.wavelets.daub(int(systolic/10)) * int(math.sqrt(pow(systolic,2)+pow(heart_rate,2)))
-    # print("cardiac_s:", len(cardiac_s))
+    distance = np.exp(((systolic + diastolic)/2 - heart_rate)/10)
+    p = int(round(distance))
+    p = int(round(25/404 * distance + 9))
+    # print(p)
+    # min_p = 9 max_p = 34
+    cardiac_s = scipy.signal.wavelets.daub(int(p))
+    cardiac_d = scipy.signal.wavelets.daub(int(p)) * (diastolic/systolic)
+    # cardiac_s = scipy.signal.wavelets.daub(int(systolic/10)) * int(math.sqrt(pow(systolic,2)+pow(heart_rate,2)))
+    # # print("cardiac_s:", len(cardiac_s))
 
-    cardiac_d = scipy.signal.wavelets.daub(int(diastolic/10)) * int(math.sqrt(pow(diastolic,2)+pow(heart_rate,2))*0.3)
+    # cardiac_d = scipy.signal.wavelets.daub(int(diastolic/10)) * int(math.sqrt(pow(diastolic,2)+pow(heart_rate,2))*0.3)
     # print("cardiac_d:", len(cardiac_d))
 
-
+    
     # Add the gap after the pqrst when the heart is resting.
     # cardiac = np.concatenate([cardiac, np.zeros(10)])
     cardiac = np.concatenate([cardiac_s, cardiac_d])
-
+    
     # Caculate the number of beats in capture time period
     num_heart_beats = int(duration * heart_rate / 60)
 
@@ -157,17 +163,35 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
         scg, sampling_rate=int(len(scg) / 10), desired_length=length, desired_sampling_rate=sampling_rate
     )
 
-
+    # max_peak = max(scg)
+    # peak_threshold = max_peak/s_d + 0.1
+    # peaks, _ = scipy.signal.find_peaks(scg, height=peak_threshold)
+    
     ### add rr
     num_points = duration * sampling_rate
     x_space = np.linspace(0,1,num_points)
     seg_fre = respiratory_rate / (60/duration)
-    seg_amp = max(scg)*0.10
-    rr_component = seg_amp*np.sin(2*np.pi * seg_fre * x_space)
-    scg += rr_component
-
+    seg_amp = max(scg) * 0.00001
+    rr_component = seg_amp * np.sin(2 * np.pi * seg_fre * x_space)
+    # scg *= rr_component
+    # plt.figure(figsize = (16,2))
+    # plt.plot(scg)
+    # plt.plot(rr_component * 1000)
+    # plt.scatter(peaks, scg[peaks], c = 'r')
+    
+    # #modeified rr component
+    # for i in range(len(scg)):
+    #     if scg[i] > 0:
+    #         scg[i] *= (rr_component[i] + 2 * seg_amp)
+    #     elif scg[i] < 0:
+    #         scg[i] *= (rr_component[i] + 2 * seg_amp)
+    
+    scg *= (rr_component + 2 * seg_amp)
+    plt.figure(figsize = (16,2))
+    plt.plot(scg)
+    
     # import matplotlib.pyplot as plt
-    # plt.plot(rr_component,'r')
+    # # plt.plot(rr_component,'r')
     # plt.plot(scg)
     # plt.show()
 

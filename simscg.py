@@ -26,7 +26,7 @@ plt.rcParams['figure.figsize'] = [20, 10]  # Bigger images
 #             ]
 
 gen_list = [
-            ['training_set',10000, 0], #5000
+            ['scg_synthetic_set',10, 0], #5000
             ]
 
 for gen_info in gen_list:
@@ -43,9 +43,12 @@ for gen_info in gen_list:
         heart_rate = random.randint(60, 90)
         respiratory_rate = random.randint(10, 25)
         systolic = random.randint(90,150)
-        diastolic = random.randint(70,100)
+        diastolic = random.randint(60,90) #+ systolic
+        while (systolic - diastolic > 60 or systolic - diastolic < 20):
+            diastolic = random.randint(60,90)
         fs = 100
-
+        print('hr:', heart_rate, 'rr:', respiratory_rate, 
+              'sp:', systolic, 'dp:', diastolic)
         noise = float(gen_info[2])
         if noise == -1:
             noise = random.choice([0.15, 0.5, 0.75])
