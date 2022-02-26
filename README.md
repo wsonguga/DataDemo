@@ -12,7 +12,7 @@ Generate the simulated SCG data:
 
 Visualize the saved SCG data npy file:
 ```
-  python3 viewscg.py [xxx.npy]
+  python3 view_data.py [xxx.npy] [num_labels]
 ```
 
 Perform clustering of the simulated data on quality evaluation:
