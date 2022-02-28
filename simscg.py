@@ -33,10 +33,15 @@ if __name__ == '__main__':
     for ind in tqdm(range(N)):
         heart_rate = random.randint(50, 150)
         respiratory_rate = random.randint(10, 30)
-        systolic = random.randint(90, 180)
-        diastolic = systolic - random.randint(40,50) #+ systolic
-        # while (systolic - diastolic > 60 or systolic - diastolic < 20):
-        #     diastolic = random.randint(60,90)
+
+        # systolic = random.randint(90, 180)
+        # diastolic = systolic - random.randint(20,60) #+ systolic
+
+        systolic = random.randint(90, 150)
+        diastolic = random.randint(60,90)
+        while (systolic - diastolic > 60 or systolic - diastolic < 20):
+            diastolic = random.randint(60,90)
+
         print('hr:', heart_rate, 'rr:', respiratory_rate, 
               'sp:', systolic, 'dp:', diastolic)
        
