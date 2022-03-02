@@ -130,9 +130,8 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
 
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
-    distance = np.exp(((systolic + diastolic)/2 - heart_rate)/10)
-    p = int(round(distance))
-    p = int(round(25/404 * distance + 9))
+    distance = np.exp((heart_rate - (systolic + diastolic)/2)/10)
+    p = int(round(25/(np.exp(8) - np.exp(-9)) * distance + 9))
     # print(p)
     # min_p = 9 max_p = 34
     cardiac_s = scipy.signal.wavelets.daub(int(p))
@@ -187,8 +186,8 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
     #         scg[i] *= (rr_component[i] + 2 * seg_amp)
     
     scg *= (rr_component + 2 * seg_amp)
-    plt.figure(figsize = (16,2))
-    plt.plot(scg)
+    # plt.figure(figsize = (16,2))
+    # plt.plot(scg)
     
     # import matplotlib.pyplot as plt
     # # plt.plot(rr_component,'r')
