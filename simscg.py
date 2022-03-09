@@ -23,7 +23,7 @@ if __name__ == '__main__':
         noise = float(sys.argv[3])
     else:
         print(f"Usage: {sys.argv[0]} path_file num_rows noise_level \n where noise level (amplitude of the laplace noise).")
-        print(f"Example: {sys.argv[0]} ./data/simu.1000_6.npy 100 0.5")       
+        print(f"Example: {sys.argv[0]} ../data/simu.1000_6.npy 100 0.5")       
         exit()
 
     fs = 100
@@ -34,13 +34,13 @@ if __name__ == '__main__':
         heart_rate = random.randint(50, 150)
         respiratory_rate = random.randint(10, 30)
 
-        # systolic = random.randint(90, 180)
-        # diastolic = systolic - random.randint(20,60) #+ systolic
+        systolic = random.randint(90, 180)
+        diastolic = systolic - random.randint(40,45) #+ systolic
 
-        systolic = random.randint(90, 170)
-        diastolic = random.randint(50,110)
-        while (systolic - diastolic > 60 or systolic - diastolic < 20):
-            diastolic = random.randint(50,110)
+        # systolic = random.randint(90, 170)
+        # diastolic = random.randint(50,110)
+        # while (systolic - diastolic > 60 or systolic - diastolic < 20):
+        #     diastolic = random.randint(50,110)
 
         print('hr:', heart_rate, 'rr:', respiratory_rate, 
               'sp:', systolic, 'dp:', diastolic)
