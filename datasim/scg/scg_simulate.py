@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
+import random
 
 import numpy as np
 import scipy
@@ -130,12 +131,18 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
 
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
-    distance = np.exp((heart_rate - (systolic + diastolic)/2)/10)
-    p = int(round(25/(np.exp(8) - np.exp(-9)) * distance + 9))
-    # print(p)
-    # min_p = 9 max_p = 34
-    cardiac_s = scipy.signal.wavelets.daub(int(p))
-    cardiac_d = scipy.signal.wavelets.daub(int(p)) * (diastolic/systolic)
+    # distance = np.exp((heart_rate - (systolic + diastolic)/2)/10)
+    # p = int(round(25/(np.exp(8) - np.exp(-9)) * distance + 9))
+
+    # distance = np.exp((heart_rate - (systolic + diastolic)/2)/10)
+    # p = int(round(25/(np.exp(8) - np.exp(-9)) * distance + 9))
+
+    # # print(p)
+    # # min_p = 9 max_p = 34
+    # cardiac_s = scipy.signal.wavelets.daub(int(p))
+    # cardiac_d = scipy.signal.wavelets.daub(int(p)) * (diastolic/systolic)
+    # print(f"cardiac_s: {len(cardiac_s)}, cardiac_d: {len(cardiac_d)}")
+    
     # cardiac_s = scipy.signal.wavelets.daub(int(systolic/10)) * int(math.sqrt(pow(systolic,2)+pow(heart_rate,2)))
     # # print("cardiac_s:", len(cardiac_s))
 
@@ -145,8 +152,22 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
     
     # Add the gap after the pqrst when the heart is resting.
     # cardiac = np.concatenate([cardiac, np.zeros(10)])
-    cardiac = np.concatenate([cardiac_s, cardiac_d])
-    
+    # cardiac = np.concatenate([cardiac_s, cardiac_d])
+
+    cardiac_length = 100 #int(300000/heart_rate)
+    ind = random.randint(17, 34) 
+    cardiac_s = scipy.signal.wavelets.daub(ind)
+    cardiac_d = scipy.signal.wavelets.daub(ind)*0.3 # change height to 0.3
+    cardiac_s = scipy.signal.resample(cardiac_s, 100)
+    cardiac_d = scipy.signal.resample(cardiac_d, 100)
+    cardiac_s = cardiac_s[0:40]
+    distance = 180-systolic # systolic 81-180
+    # distance = cardiac_length - len(cardiac_s) - len(cardiac_d) - systolic # here 140 = 40 (cardiac_s) + 100 (cardiac_d) as below
+    zero_signal = np.zeros(distance)
+    cardiac = np.concatenate([cardiac_s, zero_signal, cardiac_d])
+    # cardiac = scipy.signal.resample(cardiac, 100) # fix every cardiac length to 100
+    cardiac = scipy.signal.resample(cardiac, cardiac_length) # fix every cardiac length to 1000/heart_rate
+
     # Caculate the number of beats in capture time period
     num_heart_beats = int(duration * heart_rate / 60)
 
