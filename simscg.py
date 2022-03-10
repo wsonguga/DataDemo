@@ -35,7 +35,7 @@ if __name__ == '__main__':
         respiratory_rate = random.randint(10, 30)
 
         systolic = random.randint(90, 180)
-        diastolic = systolic - random.randint(40,45) #+ systolic
+        diastolic = random.randint(60,100) #+ systolic
 
         # systolic = random.randint(90, 170)
         # diastolic = random.randint(50,110)

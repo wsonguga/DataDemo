@@ -157,7 +157,7 @@ def _scg_simulate_daubechies(duration=10, length=None, sampling_rate=100, heart_
     cardiac_length = 100 #int(300000/heart_rate)
     ind = random.randint(17, 34) 
     cardiac_s = scipy.signal.wavelets.daub(ind)
-    cardiac_d = scipy.signal.wavelets.daub(ind)*0.3 # change height to 0.3
+    cardiac_d = scipy.signal.wavelets.daub(ind)*0.3*diastolic/80 # change height to 0.3
     cardiac_s = scipy.signal.resample(cardiac_s, 100)
     cardiac_d = scipy.signal.resample(cardiac_d, 100)
     cardiac_s = cardiac_s[0:40]
