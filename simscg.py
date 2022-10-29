@@ -17,13 +17,16 @@ from tqdm import tqdm
 
 if __name__ == '__main__':
 
-    if(len(sys.argv) > 2):
-        data_file = sys.argv[1] #htt
-        N = int(sys.argv[2])
-        noise = float(sys.argv[3])
+    if(len(sys.argv) >= 5):
+        N = int(sys.argv[1])
+        noise = float(sys.argv[2])
+        S_min = int(sys.argv[3])
+        S_max = int(sys.argv[4])
+        data_file = sys.argv[5] #htt
+
     else:
-        print(f"Usage: {sys.argv[0]} path_file num_rows noise_level \n where noise level (amplitude of the laplace noise).")
-        print(f"Example: {sys.argv[0]} ../data/simu.1000_6.npy 100 0.5")       
+        print(f"Usage: {sys.argv[0]} num_rows noise_level S_min S_max path_file \n where noise level (amplitude of the laplace noise).")
+        print(f"Example: {sys.argv[0]} 100 0.5 90 180 ../data/simu.1000_6.npy")       
         exit()
 
     fs = 100
@@ -34,7 +37,7 @@ if __name__ == '__main__':
         heart_rate = random.randint(50, 150)
         respiratory_rate = random.randint(10, 30)
 
-        systolic = random.randint(90, 180)
+        systolic = random.randint(S_min, S_max)
         diastolic = random.randint(60,100) #+ systolic
 
         # systolic = random.randint(90, 170)
