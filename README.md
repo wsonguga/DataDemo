@@ -1,9 +1,9 @@
 # DataDemo
-Time Series Data Simulation and Analytics Demo
+Cardiorespiratory Time-series Sensor Data Simulation and Demo
 
 ## Data simulations
 
-### SCG
+### SCG (Seismocardiogram)
 
 The SCG data simulation is built on the top of NeuroKit2: https://github.com/neuropsychology/NeuroKit
 
@@ -21,7 +21,7 @@ Perform clustering of the simulated data on quality evaluation:
 ```
   python3 evalscg.py
 ```
-### BSG
+### BSG (Bodyseismogram)
 
 Generate the simulated BSG data:
 ```
