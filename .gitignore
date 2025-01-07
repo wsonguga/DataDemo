@@ -135,6 +135,3 @@ dmypy.json
 
 # jupyter notebook
 tmp.ipynb
-
-# data
-/bsg_simulation/data/*
