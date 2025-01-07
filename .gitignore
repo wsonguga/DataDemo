@@ -1,6 +1,7 @@
 /bsg_simulation/data/*
 /scg_simulation/data/*
 .DS_Store
+!/data/tmp.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
