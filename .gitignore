@@ -1,5 +1,5 @@
-./bsg_simulation/data/*
-./scg_simulation/data/*
+/bsg_simulation/data/*
+/scg_simulation/data/*
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
