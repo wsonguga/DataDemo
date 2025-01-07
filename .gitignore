@@ -136,4 +136,4 @@ dmypy.json
 tmp.ipynb
 
 # data
-/bsg_simulation/data/
+/bsg_simulation/data/*
