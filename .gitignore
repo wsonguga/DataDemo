@@ -131,3 +131,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# jupyter notebook
+tmp.ipynb
+
+# data
+/bsg_simulation/data/
