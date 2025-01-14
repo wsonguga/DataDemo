@@ -69,13 +69,13 @@ def plot_fft(signal):
     plt.show()
 
 
-def add_respiration(dataset):
+def add_respiration(dataset, seg_amp = 0.5):
     num_points = 10 * 100
     x_space = np.linspace(0,1,num_points)
     for i in range(dataset.shape[0]):
         rr = random.randint(12,20)
         seg_fre = rr / (60 / 10)
-        seg_amp = 0.5
+        seg_amp = seg_amp
         rr_component = seg_amp * np.sin(2 * np.pi * seg_fre * x_space)
         dataset[i,:1000] = dataset[i,:1000] * (rr_component + 1)
         dataset[i,-4] = rr

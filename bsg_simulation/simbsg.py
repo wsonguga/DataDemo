@@ -69,7 +69,7 @@ if __name__ == "__main__":
     BSG_train_ = BSG_train.copy()
     BSG_test_ = BSG_test.copy()
     BSG_train_rr = add_respiration(BSG_train_)
-    BSG_test_rr = add_respiration(BSG_test_)
+    BSG_test_rr = add_respiration(BSG_test_, 0.1)
     np.save("./data/BSG_train_rr.npy", BSG_train_rr)
     np.save("./data/BSG_test_rr.npy", BSG_test_rr)
     print('Respiration Added')
