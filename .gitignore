@@ -2,6 +2,7 @@
 /scg_simulation/data/*
 .DS_Store
 !/bsg_simulation/data/ABP_test.npy
+!/bsg_simulation/data/template_ABP.npy
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
