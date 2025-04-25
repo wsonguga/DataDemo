@@ -136,3 +136,5 @@ dmypy.json
 
 # jupyter notebook
 tmp.ipynb
+
+/figures/
